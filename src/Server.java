@@ -1,9 +1,12 @@
 import java.rmi.*;
+
 public class Server {
   public static void main(String[] args) {
     try {
-      ServerImpl addServerImpl = new ServerImpl();
-      Naming.rebind("AddServer", addServerImpl);
+      ServerImpl serverImpl = new ServerImpl();
+      //Naming.rebind("Server", serverImpl);
+
+      serverImpl.inicializacao();
     }
     catch(Exception e) {
       System.out.println("Exception: " + e);

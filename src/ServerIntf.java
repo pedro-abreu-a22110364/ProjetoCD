@@ -1,4 +1,12 @@
 import java.rmi.*;
+
 public interface ServerIntf extends Remote {
-  double add(double d1, double d2) throws RemoteException;
+
+  void inicializacao() throws RemoteException;
+
+  String reservarSombrinha(char praiaID, int sombrinhaID, int dia, int hora, int lotacao) throws RemoteException;
+
+  String cancelarSombrinha(int sombrinhaID) throws RemoteException;
+
+  String listarSombrinhas() throws RemoteException;
 }
