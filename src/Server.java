@@ -7,6 +7,7 @@ public class Server {
       //Naming.rebind("Server", serverImpl);
 
       serverImpl.inicializacao();
+      serverImpl.listarSombrinhas('C',1,1);
     }
     catch(Exception e) {
       System.out.println("Exception: " + e);

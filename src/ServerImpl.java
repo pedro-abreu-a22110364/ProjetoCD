@@ -1,16 +1,19 @@
 import java.rmi.*;
 import java.rmi.server.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ServerImpl extends UnicastRemoteObject
   implements ServerIntf {
+
+  public static ArrayList<Praia> praias = new ArrayList<>();
+  public static HashMap<String,Sombrinha> reservas = new HashMap<>();
 
   public ServerImpl() throws RemoteException {
   }
 
   @Override
   public void inicializacao() throws RemoteException {
-    ArrayList<Praia> praias = new ArrayList<>();
 
     // Criação das praias
     Praia praiaA = new Praia('A');
@@ -54,7 +57,12 @@ public class ServerImpl extends UnicastRemoteObject
   }
 
   @Override
-  public String reservarSombrinha(char praiaID, int sombrinhaID, int dia, int hora, int lotacao) throws RemoteException {
+  public String reservarSombrinha(char praiaID, int dia, int hora, int lotacao) throws RemoteException {
+    //ler do ficheiro
+    //guardo no hash map
+    //escrevo no ficheiro
+
+
     return null;
   }
 
@@ -64,7 +72,30 @@ public class ServerImpl extends UnicastRemoteObject
   }
 
   @Override
-  public String listarSombrinhas() throws RemoteException {
+  public String listarSombrinhas(char praiaID, int dia, int hora) throws RemoteException {
+    //listar sombrinhas não reservadas numa praia, na data e hora proposta e estando o utilizador autenticado
+    Praia praiaTemp = null;
+    
+    switch (praiaID){
+      case 'A':
+        praiaTemp = praias.get(0);
+        break;
+      case 'B':
+        praiaTemp = praias.get(1);
+        break;
+      case 'C':
+        praiaTemp = praias.get(2);
+        break;
+      default:
+        //erro praia invalida
+        System.out.println("Praia inválida");
+        break;
+      }
+
+    for (Sombrinha sombrinha : praiaTemp.sombrinhas) {
+
+    }
+
     return null;
   }
 }
