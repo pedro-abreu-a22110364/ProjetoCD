@@ -6,7 +6,8 @@ public class Sombrinha extends Praia {
     ArrayList<Reserva> reservas;
 
 
-    public Sombrinha(int sombrinhaID, int lotacao) {
+    public Sombrinha(char praiaID, int sombrinhaID, int lotacao) {
+        super(praiaID);
         this.sombrinhaID = sombrinhaID;
         this.lotacao = lotacao;
         this.reservas = new ArrayList<>();

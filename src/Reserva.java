@@ -4,7 +4,7 @@ public class Reserva extends Sombrinha {
     int data;
 
     public Reserva(char praiaID, int sombrinhaID, int lotacao, int hora, int data){
-        super(praiaID,sombrinhaID,lotacao);
+        super(praiaID, sombrinhaID, lotacao);
         this.hora = hora;
         this.data = data;
     }
