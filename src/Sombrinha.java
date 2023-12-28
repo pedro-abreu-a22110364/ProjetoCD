@@ -1,8 +1,8 @@
 public class Sombrinha {
     int sombrinhaID;
+    int lotacao;
     int hora;
     int data;
-    int lotacao;
 
 
     public Sombrinha(int sombrinhaID, int lotacao) {

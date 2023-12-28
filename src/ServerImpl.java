@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
-public class aux implements ServerIntf {
+public class ServerImpl implements ServerIntf {
 
   private static String filePath = "reservas.txt";
   public static ArrayList<Praia> praias = new ArrayList<>();
