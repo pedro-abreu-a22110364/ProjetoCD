@@ -7,6 +7,7 @@ public class Praia {
 
     public Praia(char praiaID) {
         this.praiaID = praiaID;
+        this.sombrinhas = new ArrayList<>();
     }
 
     public void adicionarSombrinha(Sombrinha sombrinha) {

@@ -1,20 +1,15 @@
-public class Sombrinha {
-    int lotacao;
+import java.util.ArrayList;
+
+public class Sombrinha extends Praia {
     int sombrinhaID;
-    int hora;
-    int data;
+    int lotacao;
+    ArrayList<Reserva> reservas;
 
 
     public Sombrinha(int sombrinhaID, int lotacao) {
         this.sombrinhaID = sombrinhaID;
         this.lotacao = lotacao;
-    }
-
-    public Sombrinha(int sombrinhaID, int hora, int data, int lotacao) {
-        this.sombrinhaID = sombrinhaID;
-        this.hora = hora;
-        this.data = data;
-        this.lotacao = lotacao;
+        this.reservas = new ArrayList<>();
     }
 }
 

@@ -8,7 +8,7 @@ public class ServerImpl implements ServerIntf {
 
   private static String filePath = "reservas.txt";
   public static ArrayList<Praia> praias = new ArrayList<>();
-  public static HashMap<String, Sombrinha> reservas = new HashMap<>();
+  public static HashMap<String, ArrayList<Sombrinha>> reservas = new HashMap<>();
 
   public ServerImpl() throws RemoteException {
   }
@@ -22,31 +22,31 @@ public class ServerImpl implements ServerIntf {
 
     // Criação das sombrinhas da praia A
     for (int i = 1; i <= 10; i++) {
-      praiaA.adicionarSombrinha(new Sombrinha(i, 2));
+      praiaA.adicionarSombrinha(new Sombrinha('A',i, 2));
     }
 
     for (int i = 11; i <= 15; i++) {
-      praiaA.adicionarSombrinha(new Sombrinha(i, 3));
+      praiaA.adicionarSombrinha(new Sombrinha('A',i, 3));
     }
 
     for (int i = 16; i <= 20; i++) {
-      praiaA.adicionarSombrinha(new Sombrinha(i, 4));
+      praiaA.adicionarSombrinha(new Sombrinha('A',i, 4));
     }
 
     // Criação das sombrinhas da praia B
     for (int i = 1; i <= 5; i++) {
-      praiaB.adicionarSombrinha(new Sombrinha(i, 2));
+      praiaB.adicionarSombrinha(new Sombrinha('B',i, 2));
     }
 
     for (int i = 6; i <= 10; i++) {
-      praiaB.adicionarSombrinha(new Sombrinha(i, 3));
+      praiaB.adicionarSombrinha(new Sombrinha('B',i, 3));
     }
 
-    praiaB.adicionarSombrinha(new Sombrinha(11, 4));
+    praiaB.adicionarSombrinha(new Sombrinha('B',11, 4));
 
     // Criação das sombrinhas da praia C
     for (int i = 1; i <= 10; i++) {
-      praiaC.adicionarSombrinha(new Sombrinha(i, 2));
+      praiaC.adicionarSombrinha(new Sombrinha('C',i, 2));
     }
 
     // Adicionar as praias ao arraylist das praias
@@ -69,8 +69,7 @@ public class ServerImpl implements ServerIntf {
   @Override
   public String reservarSombrinha (char praiaID, int dia, int hora, int lotacao) throws RemoteException {
     try {
-      if ((hora > 20 || hora < 8) || ((praiaID == 'A' || praiaID == 'B') && (lotacao < 1 || lotacao > 4)) ||
-              (praiaID == 'C' && (lotacao < 1 || lotacao > 2))) {
+      if (hora > 20 || hora < 8) {
         return "Reserva não são possiveis à hora selecionada";
       } else {
         // Ler o arquivo de reservas
@@ -97,28 +96,16 @@ public class ServerImpl implements ServerIntf {
         //falta controlar o tipo de smbrinha que estas a dar e ver se nao das mais do que o que tens
         // Se não houver reserva, adicionar a nova reserva ao arquivo
         if (!reservaExistente) {
-          // Meter a false uma das sombrinhas correspondentes
-          for (Praia praia : praias) {
-            if (praia.praiaID == praiaID) {
-              a
-              for (int i = 0; i < praia.sombrinhas.size(); i++) {
-                if (praia.sombrinhas.get(i).lotacao == lotacao) {
-                  //sera que ainda temos vagas para aquele dia naquela hora??? vejamos atraves da seguinte funão
+          //sera que ainda temos vagas para aquele dia naquela hora??? vejamos atraves da seguinte funão
+          FileWriter writer = new FileWriter(arquivo, true);
+          BufferedWriter bufferWriter = new BufferedWriter(writer);
+          //bufferWriter.write(praiaID + " " + praia.sombrinhas.get(i).sombrinhaID + " " + dia + " " + hora + " " + lotacao);
+          bufferWriter.newLine();
+          bufferWriter.close();
+          return "Reserva efetuada com sucesso.";
 
-                  FileWriter writer = new FileWriter(arquivo, true);
-                  BufferedWriter bufferWriter = new BufferedWriter(writer);
-                  bufferWriter.write(praiaID + " " + praia.sombrinhas.get(i).sombrinhaID + " " + dia + " " + hora + " " + lotacao);
-                  bufferWriter.newLine();
-                  bufferWriter.close();
-                  return "Reserva efetuada com sucesso.";
-                }
-              }
-            }
-          }
-          return "Reserva não é possível";
         } else {
           return "Reserva não é possível";
-
         }
       }
 
@@ -163,6 +150,7 @@ public class ServerImpl implements ServerIntf {
   @Override
   public String listarSombrinhas (char praiaID, int dia, int hora) throws RemoteException {
     //listar sombrinhas não reservadas numa praia, na data e hora proposta e estando o utilizador autenticado
+    //
     return null;
   }
 
