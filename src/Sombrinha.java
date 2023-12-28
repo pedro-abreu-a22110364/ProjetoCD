@@ -1,6 +1,6 @@
 public class Sombrinha {
-    int sombrinhaID;
     int lotacao;
+    int sombrinhaID;
     int hora;
     int data;
 

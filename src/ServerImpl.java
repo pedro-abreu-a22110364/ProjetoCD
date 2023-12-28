@@ -163,7 +163,6 @@ public class ServerImpl implements ServerIntf {
   @Override
   public String listarSombrinhas (char praiaID, int dia, int hora) throws RemoteException {
     //listar sombrinhas não reservadas numa praia, na data e hora proposta e estando o utilizador autenticado
-    //
     return null;
   }
 
