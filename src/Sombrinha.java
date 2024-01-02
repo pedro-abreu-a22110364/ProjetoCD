@@ -1,16 +1,19 @@
-import java.util.ArrayList;
-
 public class Sombrinha extends Praia {
-    int sombrinhaID;
-    int lotacao;
-    ArrayList<Reserva> reservas;
+    private int sombrinhaID;
+    private int lotacao;
 
-
-    public Sombrinha(char praiaID, int sombrinhaID, int lotacao) {
+    public Sombrinha(String praiaID, int sombrinhaID, int lotacao) {
         super(praiaID);
         this.sombrinhaID = sombrinhaID;
         this.lotacao = lotacao;
-        this.reservas = new ArrayList<>();
+    }
+
+    public int getSombrinhaID() {
+        return sombrinhaID;
+    }
+
+    public int getLotacao() {
+        return lotacao;
     }
 }
 

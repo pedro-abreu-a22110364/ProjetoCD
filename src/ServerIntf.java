@@ -1,10 +1,15 @@
+import java.io.FileNotFoundException;
 import java.rmi.*;
 
 public interface ServerIntf extends Remote {
 
-  void inicializacao() throws RemoteException;
+  String inicializarSombrinhas();
 
-  String reservarSombrinha(char praiaID, int dia, int hora, int lotacao) throws RemoteException;
+  String carregarReservas();
+
+  String importarReserva(String linha);
+
+  String reservarSombrinha(String praiaID, int dia, int hora, int lotacao) throws RemoteException;
 
   String cancelarSombrinha(int sombrinhaID) throws RemoteException;
 

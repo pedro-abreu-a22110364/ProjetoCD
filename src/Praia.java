@@ -1,16 +1,8 @@
-import java.util.ArrayList;
-
 public class Praia {
 
-    char praiaID;
-    ArrayList<Sombrinha> sombrinhas = new ArrayList<>();
+    String praiaID;
 
-    public Praia(char praiaID) {
+    public Praia(String praiaID) {
         this.praiaID = praiaID;
-        this.sombrinhas = new ArrayList<>();
-    }
-
-    public void adicionarSombrinha(Sombrinha sombrinha) {
-        sombrinhas.add(sombrinha);
     }
 }
