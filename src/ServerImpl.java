@@ -359,6 +359,11 @@ public class ServerImpl implements ServerIntf {
     ArrayList<Reserva> reservasTemp = reservas.get(praiaID);
     ArrayList<Sombrinha> sombrinhasTemp = sombrinhas.get(praiaID);
 
+    // Verificar se o array e null
+    if (reservasTemp == null) {
+      reservasTemp = new ArrayList<>();
+    }
+
     // Filtrar as reservas da praia em questão pelo dia e hora que queremos
     for (Reserva reserva : reservasTemp) {
       if (reserva.getData() == dia && reserva.getHora() == hora) {
