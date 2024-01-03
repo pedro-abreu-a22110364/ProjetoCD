@@ -1,9 +1,6 @@
 import java.io.*;
 import java.rmi.RemoteException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Objects;
-import java.util.Scanner;
+import java.util.*;
 
 public class ServerImpl implements ServerIntf {
 
@@ -93,47 +90,22 @@ public class ServerImpl implements ServerIntf {
   }
 
   @Override
-  public String importarReserva(String linha) {
-    /*try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, false))) {
+  public String atualizarReservas() {
+    // Escrever no ficheiro
+    try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, false))) {
 
-      writer.write(linha);
+      for (Map.Entry<String,ArrayList<Reserva>> entry : reservas.entrySet()) {
+        ArrayList<Reserva> reservasTemp = entry.getValue();
+
+        for (Reserva reserva : reservasTemp) {
+          writer.write(reserva.getPraiaID() + ";" + reserva.getSombrinhaID() + ";" + reserva.getLotacao() + ";" + reserva.getHora() + ";" + reserva.getData() + "\n");
+        }
+      }
 
       return "Import das reservas com sucesso";
     } catch (IOException e) {
       System.err.println("Erro na escrita: " + e.getMessage());
       return "Erro na escrita: " + e.getMessage();
-    }*/
-    try {
-      // StringBuilder para contruir o novo conteudo do ficheiro
-      StringBuilder fileContent = new StringBuilder();
-
-      // Ler o ficheiro
-      try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
-        String currentLine;
-        while ((currentLine = reader.readLine()) != null) {
-          fileContent.append(currentLine).append("\n");
-        }
-      } catch (IOException e) {
-        System.err.println("Erro na leitura: " + e.getMessage());
-        return "Erro na leitura: " + e.getMessage();
-      }
-
-      // Adiciona a nova linha ao conteudo existente
-      fileContent.append(linha);
-
-      // Escrever no ficheiro
-      try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, false))) {
-        writer.write(fileContent.toString());
-
-        return "Import das reservas com sucesso";
-      } catch (IOException e) {
-        System.err.println("Erro na escrita: " + e.getMessage());
-        return "Erro na escrita: " + e.getMessage();
-      }
-
-    } catch (Exception e) {
-      System.err.println("Erro geral: " + e.getMessage());
-      return "Erro geral: " + e.getMessage();
     }
   }
 
@@ -243,7 +215,7 @@ public class ServerImpl implements ServerIntf {
             reservas.put("A",reservasTemp2);
           }
 
-          importarReserva("A;" + sombrinhaTemp.getSombrinhaID() + ";" + sombrinhaTemp.getLotacao() + ";" + hora + ";" + dia + "\n");
+          atualizarReservas();
 
           aux--;
           lotacao -= sombrinhaTemp.getLotacao();
@@ -269,7 +241,7 @@ public class ServerImpl implements ServerIntf {
             reservas.put("A",reservasTemp2);
           }
 
-          importarReserva("B;" + sombrinhaTemp.getSombrinhaID() + ";" + sombrinhaTemp.getLotacao() + ";" + hora + ";" + dia + "\n");
+          atualizarReservas();
 
           aux--;
           lotacao -= sombrinhaTemp.getLotacao();
@@ -293,7 +265,7 @@ public class ServerImpl implements ServerIntf {
             reservas.put("C",reservasTemp2);
           }
 
-          importarReserva("C;" + sombrinhaTemp.getSombrinhaID() + ";" + sombrinhaTemp.getLotacao() + ";" + hora + ";" + dia + "\n");
+          atualizarReservas();
 
           aux++;
           lotacao -= sombrinhaTemp.getLotacao();
@@ -305,13 +277,116 @@ public class ServerImpl implements ServerIntf {
   }
 
   @Override
-  public String cancelarSombrinha (int sombrinhaID) throws RemoteException {
-    return null;
+  public String cancelarSombrinha (String praiaID, int sombrinhaID, int dia, int hora) throws RemoteException {
+    // Validar os inputs inseridos
+
+    // Verificar se a praia é válida
+    if (!Objects.equals(praiaID, "A") && !Objects.equals(praiaID, "B") && !Objects.equals(praiaID, "C")) {
+      return "Praia invalida";
+    }
+
+    // Verificar se a sombrinha é válida
+    if (Objects.equals(praiaID, "A")) {
+      // Praia A tem 20 sombrinhas no total
+      if (sombrinhaID < 1 || sombrinhaID > 20) {
+        return "Sombrinha invalida";
+      }
+    } else if (Objects.equals(praiaID,"B")) {
+      // Praia B tem 11 sombrinhas no total
+      if (sombrinhaID < 1 || sombrinhaID > 11) {
+        return "Lotacao invalida";
+      }
+    } else if (Objects.equals(praiaID,"C")) {
+      // Praia C tem 10 sombrinhas no total
+      if (sombrinhaID < 1 || sombrinhaID > 10) {
+        return "Lotacao invalida";
+      }
+    }
+
+    // Verificar se o dia é válido (assumir que estamos em janeiro)
+    if (dia < 1 || dia > 31) {
+      return "Dia invalido";
+    }
+
+    // Verificar se a hora é válida
+    if (hora < 8 || hora > 20) {
+      return "Hora invalida";
+    }
+
+    // Validar se existe uma reserva com esses parametros
+
+    // Obter o array das reservas da praia que queremos, para fazer comparações sobre ele
+    ArrayList<Reserva> reservasTemp = reservas.get(praiaID);
+
+    Reserva reservaRemover = null;
+    boolean existe = false;
+    for (Reserva reserva : reservasTemp) {
+      if (praiaID.equals(reserva.getPraiaID()) && sombrinhaID == reserva.getSombrinhaID() && dia == reserva.getData() && hora == reserva.getHora()) {
+        // Remover a reserva do array quando esta coincide com a reserva passada por parametros
+        reservaRemover = reserva;
+        existe = true;
+      }
+    }
+
+    // Verificar se a reserva não é nula e se o array list contém alguma reserva
+    if (reservaRemover != null && !(reservasTemp.isEmpty())) {
+      reservasTemp.remove(reservaRemover);
+    }
+
+    if (!existe) {
+      // Se não houver nenhuma reserva com esses parametros caso não haja nenhuma reserva que coincida
+      return "Reserva não encontrada";
+    }
+
+    // Atualizar o hashmap
+    reservas.put(praiaID,reservasTemp);
+
+    // Se sim, remover essa reserva do ficheiro txt
+    atualizarReservas();
+
+    return "Reserva cancelada com sucesso";
   }
 
   @Override
-  public String listarSombrinhas (char praiaID, int dia, int hora) throws RemoteException {
-    return null;
+  public String listarSombrinhas (String praiaID, int dia, int hora) throws RemoteException {
+    ArrayList<Reserva> reservasDiaEHora = new ArrayList<>();
+    ArrayList<Sombrinha> sombrinhasNaoReservadas = new ArrayList<>();
+    // Verificar possibilidade de fazer a reserva
+
+    // Obter o array das reservas e sombrinhas da praia que queremos, para fazer comparações sobre ele
+    ArrayList<Reserva> reservasTemp = reservas.get(praiaID);
+    ArrayList<Sombrinha> sombrinhasTemp = sombrinhas.get(praiaID);
+
+    // Filtrar as reservas da praia em questão pelo dia e hora que queremos
+    for (Reserva reserva : reservasTemp) {
+      if (reserva.getData() == dia && reserva.getHora() == hora) {
+        reservasDiaEHora.add(reserva);
+      }
+    }
+
+    // Filtrar as sombrinhas da praia sem reserva pelo id da sombrinha
+    for (Sombrinha sombrinha : sombrinhasTemp) {
+      boolean sombrinhaReservada = false;
+
+      for (Reserva reserva : reservasDiaEHora) {
+        if (sombrinha.getSombrinhaID() == reserva.getSombrinhaID()) {
+          sombrinhaReservada = true;
+          break;
+        }
+      }
+
+      if (!sombrinhaReservada) {
+        sombrinhasNaoReservadas.add(sombrinha);
+      }
+    }
+
+    // Construir a string com as praias disponiveis
+    StringBuilder str = new StringBuilder();
+    for (Sombrinha sombrinha1 : sombrinhasNaoReservadas) {
+      str.append("Praia ").append(sombrinha1.getPraiaID()).append("; Sombrinha ").append(sombrinha1.getSombrinhaID()).append("; Lotacao ").append(sombrinha1.getLotacao()).append("\n");
+      System.out.println("Praia " + sombrinha1.getPraiaID() + "; Sombrinha " + sombrinha1.getSombrinhaID() + "; Lotacao " + sombrinha1.getLotacao());
+    }
+    return str.toString();
   }
 
 }

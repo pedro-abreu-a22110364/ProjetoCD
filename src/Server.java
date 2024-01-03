@@ -9,7 +9,9 @@ public class Server {
       serverImpl.inicializarSombrinhas();
       serverImpl.carregarReservas();
 
-      serverImpl.reservarSombrinha("A",30,8,5);
+      serverImpl.reservarSombrinha("A",30,8,2);
+      serverImpl.cancelarSombrinha("A",15,30,8);
+      serverImpl.listarSombrinhas("A",30,8);
     }
     catch(Exception e) {
       System.out.println("Exception: " + e);
