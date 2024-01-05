@@ -233,14 +233,14 @@ public class ServerImpl implements ServerIntf {
         while (lotacao > 0) {
           Sombrinha sombrinhaTemp = sombrinhasNaoReservadas.get(aux);
 
-          Reserva reservaTemp = new Reserva("A",sombrinhaTemp.getSombrinhaID(),sombrinhaTemp.getLotacao(),hora,dia);
+          Reserva reservaTemp = new Reserva("B",sombrinhaTemp.getSombrinhaID(),sombrinhaTemp.getLotacao(),hora,dia);
 
-          if (reservas.containsKey("A")) {
-            reservas.get("A").add(reservaTemp);
+          if (reservas.containsKey("B")) {
+            reservas.get("B").add(reservaTemp);
           } else {
             ArrayList<Reserva> reservasTemp2 = new ArrayList<>();
             reservasTemp2.add(reservaTemp);
-            reservas.put("A",reservasTemp2);
+            reservas.put("B",reservasTemp2);
           }
 
           atualizarReservas();

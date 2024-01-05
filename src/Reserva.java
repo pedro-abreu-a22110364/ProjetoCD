@@ -1,6 +1,5 @@
 public class Reserva extends Sombrinha {
     private int hora;
-    //int minutos;
     private int data;
 
     public Reserva(String praiaID, int sombrinhaID, int lotacao, int hora, int data){
